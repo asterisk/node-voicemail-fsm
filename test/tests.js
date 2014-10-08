@@ -32,6 +32,8 @@ var recordingSaved = false;
 var promptFinished = false;
 // used to test whether channel has been hungup
 var hungup = false;
+// used to test whether channel was answered
+var answered = false;
 // milliseconds to delay async ops for mock requests
 var asyncDelay = 100;
 
@@ -51,6 +53,15 @@ var getMockClient = function() {
   var Client = function() {
     this.getChannel = function() {
       return this;
+    };
+
+    // actually cahnnel.answer (will get denodeified)
+    this.answer = function(cb) {
+      answered = true;
+
+      setTimeout(function() {
+        cb(null);
+      }, asyncDelay);
     };
 
     // actually channel.hangup (will get denodeified)
@@ -269,7 +280,7 @@ describe('voicemail fsm', function() {
      */
     function checkSucess() {
       setTimeout(function() {
-        if (recordingSaved && promptFinished) {
+        if (recordingSaved && promptFinished && answered) {
           done();
         } else {
           checkSucess();
