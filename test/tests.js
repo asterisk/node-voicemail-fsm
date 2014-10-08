@@ -250,6 +250,7 @@ describe('voicemail fsm', function() {
     recordingSaved = false;
     promptFinished = false;
     hungup = false;
+    answered = false;
 
     done();
   });
