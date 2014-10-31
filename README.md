@@ -38,8 +38,7 @@ require('voicemail-fsm')(dependencies).create(stasisStartEvent, channel);
 
 For more information on voicemail data access layer, see [voicemail-data](http://github.com/asterisk/node-voicemail-data). For more information on voicemail prompt, see [voicemail-prompt](http://github.com/asterisk/node-voicemail-prompt). For more information on voicemail config, see [voicemail-config](http://github.com/asterisk/node-voicemail-config). For more information on voicemail mailbox, see [voicemail-mailbox](http://github.com/asterisk/node-voicemail-mailbox). For more information on voicemail auth, see [voicemail-auth](http://github.com/asterisk/node-voicemail-auth);
 
-The finite state machine will drive the voicemail application without the need
-for a external API to be programmed against.
+The finite state machine will drive the voicemail application without the need for an external API to be programmed against it.
 
 # Development
 
