@@ -1,4 +1,3 @@
-
 /**
  * Voicemail FSM module unit tests.
  *
@@ -71,6 +70,12 @@ var getMockClient = function() {
         hungup = true;
         cb(null);
       }, asyncDelay);
+    };
+
+    this.simulateHangup = function() {
+      recordingStopped = true;
+      hungup = true;
+      this.emit('StasisEnd');
     };
   };
   util.inherits(Client, Emitter);
@@ -282,6 +287,41 @@ describe('voicemail fsm', function() {
     function checkSucess() {
       setTimeout(function() {
         if (recordingSaved && promptFinished && answered) {
+          done();
+        } else {
+          checkSucess();
+        }
+      }, asyncDelay);
+    }
+  });
+
+  it('should support saving message via hangup', function(done) {
+    var channel = getMockClient().getChannel();
+    var fsm = require('../lib/fsm.js')(getMockDependencies())
+      .create(getMockStartEvent(), channel);
+
+    hangup();
+    checkSucess();
+
+    /**
+     * Simulate hangup to stop recording after recording has been started
+     */
+    function hangup() {
+      setTimeout(function() {
+        if (recordingStarted) {
+          getMockClient().simulateHangup();
+        } else {
+          hangup();
+        }
+      }, asyncDelay);
+    } 
+    
+    /**
+     * check to see if success criterias have been met
+     */
+    function checkSucess() {
+      setTimeout(function() {
+        if (recordingSaved && hungup && answered) {
           done();
         } else {
           checkSucess();
